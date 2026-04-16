@@ -88,6 +88,34 @@ addon.use('/', (new ExtractController(logger, fetcher, extractorRegistry)).route
 addon.use('/', (new ConfigureController(sources, extractors)).router);
 addon.use('/', (new ManifestController(sources, extractors)).router);
 
+addon.post('/test-ai-key', express.json(), async (req: Request, res: Response) => {
+  const { provider, key } = req.body;
+  if (!key) return res.status(400).json({ success: false, message: 'No key provided' });
+  
+  try {
+    if (provider === 'gemini') {
+      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:countTokens?key=${key}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: 'test' }] }] })
+      });
+      if (resp.ok) return res.json({ success: true });
+      const error: any = await resp.json().catch(() => ({}));
+      return res.json({ success: false, message: error?.error?.message || 'Invalid key' });
+    } else if (provider === 'openai') {
+      const resp = await fetch('https://api.openai.com/v1/models', {
+        headers: { 'Authorization': `Bearer ${key}` }
+      });
+      if (resp.ok) return res.json({ success: true });
+      const error: any = await resp.json().catch(() => ({}));
+      return res.json({ success: false, message: error?.error?.message || 'Invalid key' });
+    }
+  } catch (err: any) {
+    return res.json({ success: false, message: err.message });
+  }
+  return res.json({ success: false, message: 'Unknown provider' });
+});
+
 const streamResolver = new StreamResolver(logger, extractorRegistry);
 addon.use('/', (new StreamController(logger, sources, streamResolver)).router);
 

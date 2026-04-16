@@ -223,10 +223,15 @@ export function landingTemplate(manifest: CustomManifest) {
         const isRequired = elem.required ? ' required' : '';
         const defaultHTML = elem.default ? ` value="${elem.default}"` : '';
         const inputType = elem.type;
+        let testBtn = '';
+        if (key === 'geminiApiKey' || key === 'openAiApiKey') {
+          testBtn = `<br><button type="button" class="test-btn" onclick="testApiKey('${key}')" style="margin-top: 5px; padding: 4px 8px; font-size: 12px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer;">Test Connection</button><span id="test-result-${key}" style="margin-left: 10px; font-size: 12px;"></span>`;
+        }
         options += `
         <div class="form-element">
           <div class="label-to-top">${elem.title}</div>
           <input type="${inputType}" id="${key}" name="${key}" class="full-width"${defaultHTML}${isRequired}/>
+          ${testBtn}
         </div>
         `;
       } else if (elem.type === 'checkbox') {
@@ -263,13 +268,54 @@ export function landingTemplate(manifest: CustomManifest) {
       <div class="separator"></div>
       `;
       script += `
-      installLink.onclick = () => {
-        return mainForm.reportValidity()
+      installLink.onclick = (e) => {
+        if (!mainForm.reportValidity()) {
+          e.preventDefault();
+          return false;
+        }
       }
       const updateLink = () => {
         const config = Object.fromEntries(new FormData(mainForm))
         config.mediaFlowProxyUrl = config.mediaFlowProxyUrl.replace(/^https?.\\/\\//, '');
-        installLink.href = 'stremio://' + window.location.host + '/' + encodeURIComponent(JSON.stringify(config)) + '/manifest.json'
+        // When using localhost / 127.0.0.1, omit stremio:// to let the browser handle it securely
+        // or let the user click Stremio's native interception dialog.
+        const isLocal = window.location.host.includes('127.0.0.1') || window.location.host.includes('localhost');
+        const prefix = isLocal ? window.location.protocol + '//' : 'stremio://';
+        installLink.href = prefix + window.location.host + '/' + encodeURIComponent(JSON.stringify(config)) + '/manifest.json'
+      }
+      const testApiKey = async (keyId) => {
+        const input = document.getElementById(keyId);
+        const resultSpan = document.getElementById('test-result-' + keyId);
+        const apiKey = input.value;
+        
+        if (!apiKey) {
+          resultSpan.style.color = '#ff6b6b';
+          resultSpan.innerText = 'Please enter an API key first.';
+          return;
+        }
+        
+        resultSpan.style.color = '#feca57';
+        resultSpan.innerText = 'Testing...';
+        
+        try {
+          const provider = keyId === 'geminiApiKey' ? 'gemini' : 'openai';
+          const response = await fetch('/test-ai-key', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ provider, key: apiKey })
+          });
+          const data = await response.json();
+          if (data.success) {
+            resultSpan.style.color = '#1dd1a1';
+            resultSpan.innerText = 'Connection Successful!';
+          } else {
+            resultSpan.style.color = '#ff6b6b';
+            resultSpan.innerText = 'Failed: ' + (data.message || 'Invalid key');
+          }
+        } catch (err) {
+          resultSpan.style.color = '#ff6b6b';
+          resultSpan.innerText = 'Error connecting to server. Please try again later.';
+        }
       }
       mainForm.onchange = updateLink
       `;
@@ -326,18 +372,46 @@ export function landingTemplate(manifest: CustomManifest) {
 
       ${formHTML}
 
-      <a id="installLink" class="install-link" href="#">
-      <button name="Install">INSTALL</button>
-      </a>
+      <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;">
+        <a id="installLink" class="install-link" href="#">
+          <button style="margin: 0;" name="Install">INSTALL</button>
+        </a>
+        <button id="copyLinkBtn" style="margin: 0; background: linear-gradient(135deg, #00b894 0%, #55efc4 100%); box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);" name="Copy">COPY LINK</button>
+      </div>
       ${contactHTML}
     </div>
     <script>
       ${script}
 
       if (typeof updateLink === 'function')
-      updateLink()
-      else
-      installLink.href = 'stremio://' + window.location.host + '/manifest.json'
+        updateLink()
+      else {
+        const isLocal = window.location.host.includes('127.0.0.1') || window.location.host.includes('localhost');
+        const prefix = isLocal ? window.location.protocol + '//' : 'stremio://';
+        installLink.href = prefix + window.location.host + '/manifest.json'
+      }
+
+      const copyBtn = document.getElementById('copyLinkBtn');
+      if (copyBtn) {
+        copyBtn.onclick = (e) => {
+          e.preventDefault();
+          if (typeof mainForm !== 'undefined' && mainForm && !mainForm.reportValidity()) return;
+          const targetHref = installLink.href || (window.location.protocol + '//' + window.location.host + '/manifest.json');
+          const finalLink = targetHref.replace(/^stremio:\\/\\//, window.location.protocol + '//');
+          
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(finalLink).then(() => {
+              const originalText = copyBtn.innerText;
+              copyBtn.innerText = 'COPIED!';
+              setTimeout(() => { copyBtn.innerText = originalText; }, 2000);
+            }).catch(() => {
+              prompt('Copy this link and paste it into the Stremio search bar:', finalLink);
+            });
+          } else {
+            prompt('Copy this link and paste it into the Stremio search bar:', finalLink);
+          }
+        };
+      }
     </script>
   </body>
 
