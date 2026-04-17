@@ -16,3 +16,6 @@ Thumbs.db
 *.sqlite3
 *.db
 HANDOVER.md
+
+# Cloudflare
+.wrangler/
