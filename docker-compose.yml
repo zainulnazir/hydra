@@ -1,0 +1,31 @@
+services:
+  hydra:
+    build: .
+    container_name: hydra
+    restart: unless-stopped
+    ports:
+      - "51546:51546"
+    environment:
+      - NODE_ENV=production
+      # - REDIS_URL=redis://redis:6379
+      # - GEMINI_API_KEY=your_key_here
+      # - OPENAI_API_KEY=your_key_here
+      # - FLARESOLVERR_ENDPOINT=http://flaresolverr:8191
+      # - DISABLED_EXTRACTORS=
+      # - DISABLED_SOURCES=
+    volumes:
+      - hydra-cache:/tmp
+    # Uncomment below to add Redis for distributed caching
+    # depends_on:
+    #   - redis
+
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: hydra-redis
+  #   restart: unless-stopped
+  #   volumes:
+  #     - redis-data:/data
+
+volumes:
+  hydra-cache:
+  # redis-data:

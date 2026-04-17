@@ -3,413 +3,865 @@ import { CustomManifest } from './types';
 import { envGet } from './utils';
 
 const STYLESHEET = `
-* {
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --bg: #08080c;
+  --surface: rgba(255,255,255,0.035);
+  --surface-hover: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.07);
+  --border-focus: rgba(124,58,237,0.5);
+  --text: #e4e4e7;
+  --text-muted: #71717a;
+  --text-dim: #a1a1aa;
+  --accent: #7c3aed;
+  --accent-light: #a78bfa;
+  --accent-glow: rgba(124,58,237,0.25);
+  --success: #10b981;
+  --success-glow: rgba(16,185,129,0.2);
+  --error: #ef4444;
+  --warn: #f59e0b;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
 }
 
-body,
 html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
+  background: var(--bg);
   min-height: 100%;
 }
 
 body {
-  padding: 4vh 2vh;
-  font-size: 2vh;
-  background-color: #0f0f13;
-  color: #f1f1f1;
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  padding: 2rem 1rem 4rem;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-html {
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+/* Ambient background glow */
+body::before {
+  content: '';
+  position: fixed;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  height: 60vh;
+  background: radial-gradient(ellipse, rgba(124,58,237,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Glassmorphism Card Effect */
-#addon {
-  width: 100%;
-  max-width: 600px;
+/* ── Layout ── */
+.wrapper {
+  max-width: 680px;
   margin: 0 auto;
-  background: rgba(20, 20, 25, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 4vh 5vh;
-  border-radius: 2vh;
-  box-shadow: 0 2vh 4vh rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Hero ── */
+.hero {
   text-align: center;
+  padding: 1rem 0 2rem;
+  animation: fadeUp 0.6s ease-out both;
 }
 
-h1 {
-  font-size: 4vh;
-  font-weight: 700;
-  margin: 0 0 0.5vh 0;
-  letter-spacing: -0.02em;
+.hero-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 22px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 24px var(--accent-glow));
 }
 
-h2.version {
-  font-size: 1.8vh;
-  font-weight: 400;
-  color: #a0a0b0;
-  margin: 0 0 3vh 0;
+.hero-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #e4e4e7, var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.25rem;
 }
 
-h3 {
-  font-size: 2.2vh;
-  margin-top: 3vh;
-  margin-bottom: 1.5vh;
+.hero-version {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  background: rgba(124,58,237,0.12);
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.hero-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.hero-links {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.hero-links a {
+  color: var(--accent-light);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.hero-links a:hover {
+  color: #c4b5fd;
+}
+
+/* ── Sections ── */
+.section {
+  margin-top: 1.25rem;
+  animation: fadeUp 0.5s ease-out both;
+}
+
+.section:nth-child(2) { animation-delay: 0.08s; }
+.section:nth-child(3) { animation-delay: 0.12s; }
+.section:nth-child(4) { animation-delay: 0.16s; }
+.section:nth-child(5) { animation-delay: 0.20s; }
+.section:nth-child(6) { animation-delay: 0.24s; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: border-color 0.3s;
+}
+
+.card:hover {
+  border-color: rgba(255,255,255,0.1);
+}
+
+/* Collapsible sections */
+details.card {
+  overflow: hidden;
+}
+
+details.card > summary {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text);
+  user-select: none;
+  list-style: none;
+  transition: background 0.2s;
+}
+
+details.card > summary::-webkit-details-marker { display: none; }
+
+details.card > summary::after {
+  content: '';
+  margin-left: auto;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(-45deg);
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+details[open].card > summary::after {
+  transform: rotate(45deg);
+}
+
+details.card > summary:hover {
+  background: var(--surface-hover);
+}
+
+details.card > .section-body {
+  padding: 0 1.25rem 1.25rem;
+}
+
+/* Non-collapsible card */
+.card-static {
+  padding: 1.25rem;
+}
+
+.section-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--accent-light);
+  opacity: 0.85;
+}
+
+.section-title {
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
-p, .description {
-  font-size: 1.75vh;
-  line-height: 1.6;
-  opacity: 0.9;
-  text-align: left;
-  margin: 0 0 2vh 0;
+.section-subtitle {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 0.25rem;
 }
 
-ul {
-  font-size: 1.75vh;
-  margin: 0;
-  padding-left: 3vh;
-  text-align: left;
-  opacity: 0.9;
+/* ── Input fields ── */
+.field {
+  margin-bottom: 0.875rem;
 }
 
-a {
-  color: #a371f7;
-  text-decoration: none;
-  transition: color 0.2s ease;
+.field:last-child {
+  margin-bottom: 0;
 }
 
-a:hover {
-  color: #bfa0ff;
-  text-decoration: underline;
+.field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-bottom: 0.35rem;
 }
 
-button {
-  border: 0;
-  outline: 0;
-  color: white;
-  background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
-  padding: 1.5vh 4vh;
-  margin: 3vh auto 1vh auto;
-  border-radius: 1vh;
-  text-align: center;
-  font-family: inherit;
-  font-size: 2.2vh;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  display: inline-block;
-  box-shadow: 0 1vh 2vh rgba(99, 102, 241, 0.3);
-  transition: all 0.2s ease-in-out;
+.field-input {
   width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.8rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 1.5vh 2.5vh rgba(99, 102, 241, 0.4);
+.field-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 0.5vh 1vh rgba(99, 102, 241, 0.3);
+.field-input::placeholder {
+  color: var(--text-muted);
 }
 
-.logo {
-  height: 14vh;
-  width: 14vh;
-  margin: 0 auto 2vh auto;
+/* ── Checkbox grid (languages) ── */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.4rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.checkbox-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.checkbox-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  background: rgba(0,0,0,0.3);
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.checkbox-item input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox-item input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4.5px;
+  top: 1.5px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* ── Pill toggles (resolutions) ── */
+.pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pill-item {
+  position: relative;
+}
+
+.pill-item input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pill-label {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.pill-label:hover {
+  border-color: rgba(255,255,255,0.15);
+  color: var(--text);
+}
+
+.pill-item input:checked + .pill-label {
+  background: rgba(239,68,68,0.12);
+  border-color: rgba(239,68,68,0.3);
+  color: #fca5a5;
+}
+
+/* ── AI key test button ── */
+.field-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.field-row .field-input {
+  flex: 1;
+}
+
+.test-btn {
+  padding: 0.55rem 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: rgba(0,0,0,0.3);
+  color: var(--text-dim);
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.test-btn:hover {
+  background: var(--surface-hover);
+  border-color: rgba(255,255,255,0.15);
+  color: var(--text);
+}
+
+.test-result {
+  font-size: 0.7rem;
+  margin-top: 0.3rem;
+  min-height: 1rem;
+  transition: color 0.2s;
+}
+
+.test-result.success { color: var(--success); }
+.test-result.error { color: var(--error); }
+.test-result.loading { color: var(--warn); }
+
+/* ── Action buttons ── */
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.6rem;
+  animation: fadeUp 0.5s ease-out 0.3s both;
+}
+
+.btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.logo img {
-  width: 100%;
-  object-fit: contain;
-}
-
-.separator {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  margin: 3vh 0;
-  width: 100%;
-}
-
-/* Form Styles Override */
-.pure-form {
-  text-align: left;
-}
-
-.form-element {
-  margin-bottom: 2vh;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1.5vh;
-  border-radius: 1vh;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.label-to-top {
-  display: block;
-  margin-bottom: 1vh;
-  font-weight: 600;
-  font-size: 1.6vh;
-  color: #e0e0e0;
-}
-
-.label-to-right {
-  margin-left: 1vh;
-  font-size: 1.6vh;
-  cursor: pointer;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="number"],
-select {
-  width: 100%;
-  padding: 1.2vh !important;
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 0.5vh !important;
-  color: white !important;
+  gap: 0.4rem;
+  padding: 0.8rem 1.25rem;
   font-family: inherit;
-  font-size: 1.6vh !important;
-  box-shadow: none !important;
-}
-
-input[type="checkbox"] {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border: none;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transform: scale(1.2);
-  accent-color: #7c3aed;
+  text-decoration: none;
+  color: white;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-input:focus, select:focus {
-  outline: none;
-  border-color: #a371f7 !important;
-  background: rgba(255, 255, 255, 0.1) !important;
+.btn-primary {
+  background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px rgba(124,58,237,0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px var(--accent-glow);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(6,182,212,0.1) 100%);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #6ee7b7;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, rgba(16,185,129,0.22) 0%, rgba(6,182,212,0.15) 100%);
+  border-color: rgba(16,185,129,0.4);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(1px);
+}
+
+/* ── Info bar ── */
+.info-bar {
+  margin-top: 1.25rem;
+  text-align: center;
+  animation: fadeUp 0.5s ease-out 0.35s both;
+}
+
+.info-bar p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.info-bar a {
+  color: var(--accent-light);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.info-bar a:hover {
+  color: #c4b5fd;
+}
+
+/* ── Toast notification ── */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(16,185,129,0.95);
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+}
+
+.toast.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Keyframes ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  .hero-title { font-size: 1.75rem; }
+  .checkbox-grid { grid-template-columns: 1fr; }
+  .actions { flex-direction: column; }
+  .hero-links { flex-direction: column; gap: 0.4rem; }
 }
 `;
 
 export function landingTemplate(manifest: CustomManifest) {
-  const background = manifest.background || 'https://dl.strem.io/addon-background.jpg';
   const logo = manifest.logo || 'https://dl.strem.io/addon-logo.png';
-  const contactHTML = manifest.contactEmail
-    ? `<div class="contact">
-      <p>Contact ${manifest.name} creator:</p>
-      <a href="mailto:${manifest.contactEmail}">${manifest.contactEmail}</a>
-    </div>`
-    : '';
 
-  const stylizedTypes = manifest.types
-    .map(types => types.charAt(0).toUpperCase() + types.slice(1) + (types !== 'series' ? 's' : ''));
+  // ── Categorize config items ──
+  const languageKeys = new Set([
+    'multi','al','ar','bg','bl','cs','de','el','en','es','et','fa','fr','gu','he','hi','hr','hu',
+    'id','it','ja','kn','ko','lt','lv','ml','mr','mx','nl','no','pa','pl','pt','ro','ru','sk',
+    'sl','sr','ta','te','th','tr','uk','vi','zh',
+  ]);
 
-  let formHTML = '';
-  let script = '';
+  const languages: typeof manifest.config = [];
+  const proxyFields: typeof manifest.config = [];
+  const aiFields: typeof manifest.config = [];
+  const resolutionFields: typeof manifest.config = [];
+  const advancedCheckboxes: typeof manifest.config = [];
 
-  if ((manifest.config || []).length) {
-    let options = '';
-    manifest.config.forEach((elem) => {
-      const key = elem.key;
-      if (['text', 'number', 'password'].includes(elem.type)) {
-        const isRequired = elem.required ? ' required' : '';
-        const defaultHTML = elem.default ? ` value="${elem.default}"` : '';
-        const inputType = elem.type;
-        let testBtn = '';
-        if (key === 'geminiApiKey' || key === 'openAiApiKey') {
-          testBtn = `<br><button type="button" class="test-btn" onclick="testApiKey('${key}')" style="margin-top: 5px; padding: 4px 8px; font-size: 12px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer;">Test Connection</button><span id="test-result-${key}" style="margin-left: 10px; font-size: 12px;"></span>`;
-        }
-        options += `
-        <div class="form-element">
-          <div class="label-to-top">${elem.title}</div>
-          <input type="${inputType}" id="${key}" name="${key}" class="full-width"${defaultHTML}${isRequired}/>
-          ${testBtn}
-        </div>
-        `;
-      } else if (elem.type === 'checkbox') {
-        const isChecked = elem.default === 'checked' ? ' checked' : '';
-        options += `
-        <div class="form-element">
-          <label for="${key}">
-            <input type="checkbox" id="${key}" name="${key}"${isChecked}> <span class="label-to-right">${elem.title}</span>
-          </label>
-        </div>
-        `;
-      } else if (elem.type === 'select') {
-        const defaultValue = elem.default || (elem.options || [])[0];
-        options += `<div class="form-element">
-        <div class="label-to-top">${elem.title}</div>
-        <select id="${key}" name="${key}" class="full-width">
-        `;
-        const selections = elem.options || [];
-        selections.forEach((el) => {
-          const isSelected = el === defaultValue ? ' selected' : '';
-          options += `<option value="${el}"${isSelected}>${el}</option>`;
-        });
-        options += `</select>
-               </div>
-               `;
-      }
-    });
-    if (options.length) {
-      formHTML = `
-      <form class="pure-form" id="mainForm">
-        ${options}
-      </form>
-
-      <div class="separator"></div>
-      `;
-      script += `
-      installLink.onclick = (e) => {
-        if (!mainForm.reportValidity()) {
-          e.preventDefault();
-          return false;
-        }
-      }
-      const updateLink = () => {
-        const config = Object.fromEntries(new FormData(mainForm))
-        config.mediaFlowProxyUrl = config.mediaFlowProxyUrl.replace(/^https?.\\/\\//, '');
-        // Always use stremio:// for the install button, regardless of localhost or not.
-        // We will instead strip http/https if the browser has added it locally for port support
-        installLink.href = 'stremio://' + window.location.host + '/' + encodeURIComponent(JSON.stringify(config)) + '/manifest.json'
-      }
-      const testApiKey = async (keyId) => {
-        const input = document.getElementById(keyId);
-        const resultSpan = document.getElementById('test-result-' + keyId);
-        const apiKey = input.value;
-        
-        if (!apiKey) {
-          resultSpan.style.color = '#ff6b6b';
-          resultSpan.innerText = 'Please enter an API key first.';
-          return;
-        }
-        
-        resultSpan.style.color = '#feca57';
-        resultSpan.innerText = 'Testing...';
-        
-        try {
-          const provider = keyId === 'geminiApiKey' ? 'gemini' : 'openai';
-          const response = await fetch('/test-ai-key', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ provider, key: apiKey })
-          });
-          const data = await response.json();
-          if (data.success) {
-            resultSpan.style.color = '#1dd1a1';
-            resultSpan.innerText = 'Connection Successful!';
-          } else {
-            resultSpan.style.color = '#ff6b6b';
-            resultSpan.innerText = 'Failed: ' + (data.message || 'Invalid key');
-          }
-        } catch (err) {
-          resultSpan.style.color = '#ff6b6b';
-          resultSpan.innerText = 'Error connecting to server. Please try again later.';
-        }
-      }
-      mainForm.onchange = updateLink
-      `;
+  for (const item of manifest.config || []) {
+    if (languageKeys.has(item.key)) {
+      languages.push(item);
+    } else if (item.key === 'mediaFlowProxyUrl' || item.key === 'mediaFlowProxyPassword') {
+      proxyFields.push(item);
+    } else if (item.key === 'geminiApiKey' || item.key === 'openAiApiKey') {
+      aiFields.push(item);
+    } else if (item.key.startsWith('excludeResolution_')) {
+      resolutionFields.push(item);
+    } else {
+      advancedCheckboxes.push(item);
     }
   }
 
-  return `
-  <!DOCTYPE html>
-  <html style="background-image: url(${background});" lang="en">
+  // ── Build language checkboxes ──
+  const languageHTML = languages.map((elem) => {
+    const isChecked = elem.default === 'checked' ? ' checked' : '';
+    return `<label class="checkbox-item">
+      <input type="checkbox" id="${elem.key}" name="${elem.key}"${isChecked}>
+      <span>${elem.title}</span>
+    </label>`;
+  }).join('');
 
-  <head>
-    <meta charset="utf-8">
-    <title>${manifest.name} - Stremio Addon</title>
-    <style>${STYLESHEET}</style>
-    <link rel="shortcut icon" href="${logo}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@2.1.0/build/pure-min.css" integrity="sha384-yHIFVG6ClnONEA5yB5DJXfW2/KC173DIQrYoZMEtBvGzmf0PKiGyNEqe9N6BNDBH" crossorigin="anonymous">
-  </head>
+  // ── Build proxy fields ──
+  const proxyHTML = proxyFields.map((elem) => {
+    const inputType = elem.type === 'password' ? 'password' : 'text';
+    const defaultVal = elem.default ? ` value="${elem.default}"` : '';
+    const placeholder = elem.key === 'mediaFlowProxyUrl' ? ' placeholder="https://your-proxy.example.com"' : ' placeholder="••••••••"';
+    return `<div class="field">
+      <label class="field-label" for="${elem.key}">${elem.title}</label>
+      <input type="${inputType}" id="${elem.key}" name="${elem.key}" class="field-input"${defaultVal}${placeholder}>
+    </div>`;
+  }).join('');
 
-  <body>
-    <div id="addon">
-      <div class="logo">
-      <img src="${logo}" alt="logo">
+  // ── Build AI fields with test buttons ──
+  const aiHTML = aiFields.map((elem) => {
+    const defaultVal = elem.default ? ` value="${elem.default}"` : '';
+    const providerName = elem.key === 'geminiApiKey' ? 'Gemini' : 'OpenAI';
+    return `<div class="field">
+      <label class="field-label" for="${elem.key}">${elem.title}</label>
+      <div class="field-row">
+        <input type="password" id="${elem.key}" name="${elem.key}" class="field-input"${defaultVal} placeholder="Enter your ${providerName} key">
+        <button type="button" class="test-btn" onclick="testApiKey('${elem.key}')">Test</button>
       </div>
-      <h1 class="name">${manifest.name}</h1>
-      <h2 class="version">v${manifest.version || '0.0.0'}</h2>
-      <div class="description"><small>${manifest.description.replace(/\n/g, '<br>') || ''}</small></div>
+      <div class="test-result" id="test-result-${elem.key}"></div>
+    </div>`;
+  }).join('');
 
-      <div class="separator"></div>
+  // ── Build resolution pills ──
+  const resolutionHTML = resolutionFields.map((elem) => {
+    const isChecked = elem.default === 'checked' ? ' checked' : '';
+    // Extract the resolution label from title like "Exclude resolution 1080p"
+    const resLabel = (elem.title ?? '').replace('Exclude resolution ', '');
+    return `<div class="pill-item">
+      <input type="checkbox" id="${elem.key}" name="${elem.key}"${isChecked}>
+      <label class="pill-label" for="${elem.key}">${resLabel}</label>
+    </div>`;
+  }).join('');
 
-      <p>
-        The source code can be found on <a href="https://github.com/zainulnazir/hydra" target="_blank">GitHub</a>.
-      </p>
+  // ── Build advanced checkboxes ──
+  const advancedHTML = advancedCheckboxes.map((elem) => {
+    const isChecked = elem.default === 'checked' ? ' checked' : '';
+    return `<label class="checkbox-item">
+      <input type="checkbox" id="${elem.key}" name="${elem.key}"${isChecked}>
+      <span>${elem.title}</span>
+    </label>`;
+  }).join('');
 
-      <div class="separator"></div>
+  // ── Content types ──
+  const stylizedTypes = manifest.types
+    .map(types => types.charAt(0).toUpperCase() + types.slice(1) + (types !== 'series' ? 's' : ''));
 
-      ${envGet('CONFIGURATION_DESCRIPTION') || ''}
+  const configDescription = envGet('CONFIGURATION_DESCRIPTION') || '';
 
-      <div class="separator"></div>
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${manifest.name} - Configure</title>
+  <meta name="description" content="${manifest.name} - ${manifest.description.split('\n')[0]}">
+  <link rel="shortcut icon" href="${logo}" type="image/x-icon">
+  <style>${STYLESHEET}</style>
+</head>
+<body>
 
-      <p>
-        Note: HTTP streams have limitations. For a better experience, I'd advise using a Debrid service and Hydra as fallback.
-        <a href="https://torbox.app/subscription?referral=f22eb00d-27ce-4e20-85fc-68da3d018b99" target="_blank"><strong>TorBox</strong></a> is working very well. 
-      </p>
+<div class="wrapper">
 
-      <div class="separator"></div>
-
-      <h3 class="gives">This addon has more :</h3>
-      <ul>
-      ${stylizedTypes.map(t => `<li>${t}</li>`).join('')}
-      </ul>
-
-      <div class="separator"></div>
-
-      ${formHTML}
-
-      <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 20px;">
-        <a id="installLink" class="install-link" href="#">
-          <button style="margin: 0;" name="Install">INSTALL</button>
-        </a>
-        <button id="copyLinkBtn" style="margin: 0; background: linear-gradient(135deg, #00b894 0%, #55efc4 100%); box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);" name="Copy">COPY LINK</button>
-      </div>
-      ${contactHTML}
+  <!-- Hero -->
+  <div class="hero">
+    <img class="hero-logo" src="${logo}" alt="${manifest.name} logo">
+    <h1 class="hero-title">${manifest.name}</h1>
+    <span class="hero-version">v${manifest.version || '0.0.0'}</span>
+    <p class="hero-desc">${manifest.description.split('\n')[0]}</p>
+    <div class="hero-links">
+      <a href="https://github.com/zainulnazir/hydra" target="_blank">GitHub</a>
+      <span style="color:var(--text-muted)">•</span>
+      <span style="color:var(--text-muted);font-size:0.75rem">Supports ${stylizedTypes.join(' & ')}</span>
     </div>
-    <script>
-      ${script}
+  </div>
 
-      if (typeof updateLink === 'function')
-        updateLink()
-      else {
-        installLink.href = 'stremio://' + window.location.host + '/manifest.json'
+  <form id="mainForm">
+
+    <!-- Languages -->
+    <div class="section">
+      <details class="card" open>
+        <summary>
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          <span class="section-title">Languages</span>
+          <span class="section-subtitle">— select content languages</span>
+        </summary>
+        <div class="section-body">
+          <div class="checkbox-grid">
+            ${languageHTML}
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- Proxy -->
+    <div class="section">
+      <details class="card">
+        <summary>
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="section-title">MediaFlow Proxy</span>
+          <span class="section-subtitle">— unlock more hosters</span>
+        </summary>
+        <div class="section-body">
+          <p style="font-size:0.73rem;color:var(--text-muted);margin-bottom:0.75rem;line-height:1.5">
+            Required for Fastream, FileLions, FileMoon, LuluStream, Mixdrop, Streamtape, and VOE.
+          </p>
+          ${proxyHTML}
+        </div>
+      </details>
+    </div>
+
+    <!-- AI Fallback -->
+    <div class="section">
+      <details class="card">
+        <summary>
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/><circle cx="9" cy="14" r="1.5" fill="currentColor"/><circle cx="15" cy="14" r="1.5" fill="currentColor"/><path d="M9 18h6"/></svg>
+          <span class="section-title">AI Fallback</span>
+          <span class="section-subtitle">— self-healing extraction</span>
+        </summary>
+        <div class="section-body">
+          <p style="font-size:0.73rem;color:var(--text-muted);margin-bottom:0.75rem;line-height:1.5">
+            If native extractors fail, AI will dynamically analyze the page to recover stream links.
+          </p>
+          ${aiHTML}
+        </div>
+      </details>
+    </div>
+
+    <!-- Resolution Filters -->
+    <div class="section">
+      <details class="card">
+        <summary>
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span class="section-title">Resolution Filters</span>
+          <span class="section-subtitle">— exclude unwanted qualities</span>
+        </summary>
+        <div class="section-body">
+          <p style="font-size:0.73rem;color:var(--text-muted);margin-bottom:0.75rem;line-height:1.5">
+            Toggle resolutions you want to <em>exclude</em> from results.
+          </p>
+          <div class="pill-grid">
+            ${resolutionHTML}
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- Advanced -->
+    <div class="section">
+      <details class="card">
+        <summary>
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1.08-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1.08 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001.08 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1.08z"/></svg>
+          <span class="section-title">Advanced</span>
+          <span class="section-subtitle">— errors, extractors & more</span>
+        </summary>
+        <div class="section-body">
+          <div class="checkbox-grid">
+            ${advancedHTML}
+          </div>
+        </div>
+      </details>
+    </div>
+
+  </form>
+
+  ${configDescription ? `<div class="section"><div class="card card-static" style="font-size:0.78rem;color:var(--text-dim);line-height:1.6">${configDescription}</div></div>` : ''}
+
+  <!-- Action Buttons -->
+  <div class="actions">
+    <a id="installLink" href="#" class="btn btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      INSTALL
+    </a>
+    <button id="copyLinkBtn" type="button" class="btn btn-secondary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      COPY LINK
+    </button>
+  </div>
+
+  <!-- Info -->
+  <div class="info-bar">
+    <p>
+      HTTP streams have limitations. For a better experience, consider a Debrid service.<br>
+      <a href="https://torbox.app/subscription?referral=f22eb00d-27ce-4e20-85fc-68da3d018b99" target="_blank">TorBox</a> works very well as a complement.
+    </p>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">Link copied to clipboard</div>
+
+<script>
+(function() {
+  const installLink = document.getElementById('installLink');
+  const mainForm = document.getElementById('mainForm');
+  const copyBtn = document.getElementById('copyLinkBtn');
+  const toast = document.getElementById('toast');
+
+  function updateLink() {
+    const formData = new FormData(mainForm);
+    const config = Object.fromEntries(formData);
+    if (config.mediaFlowProxyUrl) {
+      config.mediaFlowProxyUrl = config.mediaFlowProxyUrl.replace(/^https?:\\/\\//, '');
+    }
+    installLink.href = 'stremio://' + window.location.host + '/' + encodeURIComponent(JSON.stringify(config)) + '/manifest.json';
+  }
+
+  installLink.onclick = function(e) {
+    if (!mainForm.reportValidity()) {
+      e.preventDefault();
+      return false;
+    }
+  };
+
+  mainForm.addEventListener('change', updateLink);
+  mainForm.addEventListener('input', updateLink);
+
+  // Initialize link
+  updateLink();
+
+  // Copy button
+  copyBtn.onclick = function(e) {
+    e.preventDefault();
+    if (!mainForm.reportValidity()) return;
+
+    const targetHref = installLink.href || ('stremio://' + window.location.host + '/manifest.json');
+    const finalLink = targetHref.replace(/^stremio:\\/\\//, window.location.protocol + '//');
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(finalLink).then(function() {
+        showToast();
+      }).catch(function() {
+        prompt('Copy this link and paste it into the Stremio search bar:', finalLink);
+      });
+    } else {
+      prompt('Copy this link and paste it into the Stremio search bar:', finalLink);
+    }
+  };
+
+  function showToast() {
+    toast.classList.add('visible');
+    setTimeout(function() {
+      toast.classList.remove('visible');
+    }, 2200);
+  }
+
+  // Test API key
+  window.testApiKey = function(keyId) {
+    var input = document.getElementById(keyId);
+    var resultEl = document.getElementById('test-result-' + keyId);
+    var apiKey = input.value;
+
+    if (!apiKey) {
+      resultEl.className = 'test-result error';
+      resultEl.innerText = 'Please enter an API key first.';
+      return;
+    }
+
+    resultEl.className = 'test-result loading';
+    resultEl.innerText = 'Testing connection…';
+
+    var provider = keyId === 'geminiApiKey' ? 'gemini' : 'openai';
+
+    fetch('/test-ai-key', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ provider: provider, key: apiKey })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+      if (data.success) {
+        resultEl.className = 'test-result success';
+        resultEl.innerText = '✓ Connection successful';
+      } else {
+        resultEl.className = 'test-result error';
+        resultEl.innerText = '✗ ' + (data.message || 'Invalid key');
       }
+    })
+    .catch(function() {
+      resultEl.className = 'test-result error';
+      resultEl.innerText = '✗ Network error. Please try again.';
+    });
+  };
+})();
+</script>
 
-      const copyBtn = document.getElementById('copyLinkBtn');
-      if (copyBtn) {
-        copyBtn.onclick = (e) => {
-          e.preventDefault();
-          if (typeof mainForm !== 'undefined' && mainForm && !mainForm.reportValidity()) return;
-          const targetHref = installLink.href || ('stremio://' + window.location.host + '/manifest.json');
-          const finalLink = targetHref.replace(/^stremio:\\/\\//, window.location.protocol + '//');
-          
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(finalLink).then(() => {
-              const originalText = copyBtn.innerText;
-              copyBtn.innerText = 'COPIED!';
-              setTimeout(() => { copyBtn.innerText = originalText; }, 2000);
-            }).catch(() => {
-              prompt('Copy this link and paste it into the Stremio search bar:', finalLink);
-            });
-          } else {
-            prompt('Copy this link and paste it into the Stremio search bar:', finalLink);
-          }
-        };
-      }
-    </script>
-  </body>
-
-  </html>`;
+</body>
+</html>`;
 }
