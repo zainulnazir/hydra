@@ -65,8 +65,8 @@ if (envGet('CACHE_FILES_DELETE_ON_START')) {
 }
 
 addon.use((req: Request, res: Response, next: NextFunction) => {
-  process.env['HOST'] = req.get('host') || req.hostname;
-  process.env['PROTOCOL'] = req.protocol;
+  if (!process.env['HOST']) process.env['HOST'] = req.get('host') || req.hostname;
+  if (!process.env['PROTOCOL']) process.env['PROTOCOL'] = req.protocol;
 
   res.setHeader('X-Request-ID', randomUUID());
 

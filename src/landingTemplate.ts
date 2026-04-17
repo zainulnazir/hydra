@@ -841,7 +841,7 @@ export function landingTemplate(manifest: CustomManifest) {
   const mainForm = document.getElementById('mainForm');
   const copyBtn = document.getElementById('copyLinkBtn');
   const toast = document.getElementById('toast');
-  const basePath = window.location.pathname.replace(/\/configure\/?$/, '');
+  const basePath = window.location.pathname.replace(/\\/configure\\/?$/, '');
 
   function updateLink() {
     const formData = new FormData(mainForm);
@@ -908,7 +908,7 @@ export function landingTemplate(manifest: CustomManifest) {
 
     var provider = keyId === 'geminiApiKey' ? 'gemini' : 'openai';
 
-    var basePath = window.location.pathname.replace(/\/configure\/?$/, '');
+    var basePath = window.location.pathname.replace(/\\/configure\\/?$/, '');
     fetch(basePath + '/test-ai-key', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
