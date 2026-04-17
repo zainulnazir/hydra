@@ -38,8 +38,7 @@ export const createKeyvSqlite = (name: string): KeyvStoreAdapter => {
   }
 
   if (redisUrl && redisUrl.startsWith('redis://')) {
-    const parsedCacheName = name.replace(/[^a-zA-Z0-9]/g, ''); // Redis URL path compatibility
-    return new KeyvRedis(`${redisUrl}/${parsedCacheName}`);
+    return new KeyvRedis(redisUrl);
   } else if (redisUrl) {
     console.warn(`Invalid REDIS_URL override: ${redisUrl}. Ensure it starts with redis://.`);
   }
