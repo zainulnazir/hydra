@@ -841,6 +841,7 @@ export function landingTemplate(manifest: CustomManifest) {
   const mainForm = document.getElementById('mainForm');
   const copyBtn = document.getElementById('copyLinkBtn');
   const toast = document.getElementById('toast');
+  const basePath = window.location.pathname.replace(/\/configure\/?$/, '');
 
   function updateLink() {
     const formData = new FormData(mainForm);
@@ -848,7 +849,7 @@ export function landingTemplate(manifest: CustomManifest) {
     if (config.mediaFlowProxyUrl) {
       config.mediaFlowProxyUrl = config.mediaFlowProxyUrl.replace(/^https?:\\/\\//, '');
     }
-    installLink.href = 'stremio://' + window.location.host + '/' + encodeURIComponent(JSON.stringify(config)) + '/manifest.json';
+    installLink.href = 'stremio://' + window.location.host + basePath + '/' + encodeURIComponent(JSON.stringify(config)) + '/manifest.json';
   }
 
   installLink.onclick = function(e) {
@@ -869,7 +870,7 @@ export function landingTemplate(manifest: CustomManifest) {
     e.preventDefault();
     if (!mainForm.reportValidity()) return;
 
-    const targetHref = installLink.href || ('stremio://' + window.location.host + '/manifest.json');
+    const targetHref = installLink.href || ('stremio://' + window.location.host + basePath + '/manifest.json');
     const finalLink = targetHref.replace(/^stremio:\\/\\//, window.location.protocol + '//');
 
     if (navigator.clipboard) {
