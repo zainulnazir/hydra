@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydra - Next Gen Stremio Add-on</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --primary: #00ffcc;
+            --secondary: #6600ff;
+            --text: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .background-blobs {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(100px);
+            opacity: 0.5;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--primary); }
+        .blob-2 { bottom: -10%; right: -10%; width: 40vw; height: 40vw; background: var(--secondary); animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 10%) scale(1.1); }
+            100% { transform: translate(-5%, -5%) scale(0.9); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 10vh 0 5vh;
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        p.subtitle {
+            font-size: 1.5rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .glass-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        footer {
+            margin-top: 10vh;
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0.6;
+        }
+        
+        .code-block {
+            background: #000;
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: monospace;
+            color: var(--primary);
+            overflow-x: auto;
+            margin-top: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Hydra</h1>
+            <p class="subtitle">The next-generation HTTP stream aggregator for Stremio. Rebuilt from the ground up to never fail.</p>
+            
+            <div class="btn-group">
+                <a href="https://github.com/zainulnazir/hydra" class="btn btn-primary" target="_blank">View on GitHub</a>
+                <a href="#install" class="btn btn-secondary">Installation</a>
+            </div>
+        </header>
+
+        <section id="features" class="features">
+            <div class="glass-card">
+                <span class="icon">🤖</span>
+                <h3>AI Healing</h3>
+                <p>Using Google Gemini and OpenAI as fallbacks, Hydra dynamically heals broken extractors by analyzing the DOM to scrape stream links natively. It never misses.</p>
+            </div>
+            <div class="glass-card">
+                <span class="icon">⚡</span>
+                <h3>Intelligent Caching</h3>
+                <p>Fully backed by Redis for centralized distributed caching. Stop hammering hosters and start streaming in milliseconds instead of seconds.</p>
+            </div>
+            <div class="glass-card">
+                <span class="icon">🚀</span>
+                <h3>High Concurrency</h3>
+                <p>Built with intelligent proxy rotation and dynamic retries. It laughs in the face of rate limits and extracts multiple links simultaneously.</p>
+            </div>
+        </section>
+
+        <section id="install" style="margin-top: 8rem;">
+            <div class="glass-card">
+                <h2>Ready to deploy?</h2>
+                <p style="margin-top: 1rem; margin-bottom: 1.5rem;">Hydra is open source. You can host it on your own infrastructure instantly using Docker.</p>
+                <div class="code-block">
+docker run \
+  --detach=true \
+  --name hydra \
+  --rm \
+  --pull always \
+  --publish 51546:51546 \
+  --env REDIS_URL="redis://your-redis-host:6379" \
+  --volume /tmp:/tmp \
+  zainulnazir/hydra
+                </div>
+                <p style="margin-top: 1.5rem;">After starting, visit <code>http://localhost:51546/configure</code> to enter your API keys and install to Stremio.</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Hydra Project. Open source under the AGPL-3.0 license.</p>
+        </footer>
+    </div>
+
+</body>
+</html>

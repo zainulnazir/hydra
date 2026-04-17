@@ -1,19 +1,32 @@
-# Hydra
+<div align="center">
+  <img src="https://img.shields.io/badge/Hydra-Next%20Gen%20Stremio-00ffcc?style=for-the-badge&logo=appveyor" alt="Hydra Logo" />
+  <h1>Hydra</h1>
 
-[![Tests](https://github.com/zainulnazir/hydra/actions/workflows/tests.yml/badge.svg)](https://github.com/zainulnazir/hydra/actions/workflows/tests.yml)
-[![GitHub release](https://img.shields.io/github/v/release/zainulnazir/hydra)](https://github.com/zainulnazir/hydra/releases)
+  <p>
+    <strong>The next-generation HTTP stream aggregator for Stremio. Rebuilt from the ground up to never fail.</strong>
+  </p>
 
-[Stremio](https://www.stremio.com/) add-on which provides HTTP URLs from streaming websites. This is a significantly enhanced and rebranded version of the original webstreamer project.
+  [![Tests](https://github.com/zainulnazir/hydra/actions/workflows/tests.yml/badge.svg)](https://github.com/zainulnazir/hydra/actions/workflows/tests.yml)
+  [![GitHub release](https://img.shields.io/github/v/release/zainulnazir/hydra)](https://github.com/zainulnazir/hydra/releases)
+  [![Website](https://img.shields.io/badge/Website-hydra.zainulnazir.com-00ffcc)](https://zainulnazir.github.io/hydra/)
 
-Hydra introduces next-generation features including **Automated Extractor Verification**, **Intelligent Distributed Caching** via Redis, **High-Concurrency Fetching (Proxies & Retries)**, and revolutionary **AI Capabilities (Gemini & OpenAI integration)** for resilient DOM extraction and prioritization!
+</div>
 
-## Key Features
+---
 
-- **AI-Powered Fallback**: Enter your own Gemini or OpenAI API keys on the configuration page. If our native extractors fail to parse the streaming sources, the AI agent dynamically steps in to analyze the DOM and recover the stream links.
-- **Intelligent Distributed Caching**: Backed by Redis to drastically improve response times globally and reduce load on streaming providers.
-- **Concurrent & Resilient Architecture**: Uses smart proxying, retries, and high-concurrency requests to pull in links faster than ever.
-- **Modern Configuration UI**: A newly designed glassmorphism setup page to cleanly configure your Stremio Add-On experience.
-- **Automated Extractor Verification**: Constant background verification to ensure our supported streaming hosters remain operational.
+Hydra is a highly concurrent [Stremio](https://www.stremio.com/) add-on which aggregates HTTP streaming URLs natively. This is a significantly enhanced, high-performance, and rebranded evolution of the original webstreamer project.
+
+Hydra introduces next-generation features including **Automated Extractor Verification**, **Intelligent Distributed Caching** via Redis, **High-Concurrency Fetching (Proxies & Retries)**, and revolutionary **AI Capabilities (Gemini & OpenAI integration)** for resilient DOM extraction and stream prioritization!
+
+🌐 **[Visit the Official Hydra Website](https://zainulnazir.github.io/hydra/)**
+
+## 🐉 Key Features
+
+- 🤖 **AI-Powered Fallback**: Enter your own Gemini or OpenAI API keys on the configuration page. If our native extractors fail to parse the streaming sources due to structural DOM changes, the AI agent dynamically steps in to analyze the payload and recover the stream links. It heals itself.
+- ⚡ **Intelligent Distributed Caching**: Backed by Redis to drastically improve response times globally and reduce load on streaming providers.
+- 🚀 **Concurrent & Resilient Architecture**: Uses smart proxying, retries, and high-concurrency requests to pull in links faster than ever.
+- 🖥️ **Modern Configuration UI**: A sleek, dark-mode, glassmorphism setup page to cleanly configure your Stremio Add-On experience and visually test your API keys.
+- ✅ **Automated Extractor Verification**: Constant background verification to ensure our supported streaming hosters remain operational.
 
 ## Known issues / limitations
 
@@ -74,3 +87,20 @@ Optional. If domains show Cloudflare challenges, FlareSolverr can be used to wor
 
 #### `DISABLED_EXTRACTORS` / `DISABLED_SOURCES`
 Optional. Comma separated list of extractors or sources which should be disabled.
+
+---
+
+## 🤝 Contributing
+
+We welcome out-of-the-box thinkers, developers, and Stremio enthusiasts to help Hydra grow! 
+
+Whether you're fixing bugs, adding new hoster templates to the `src/extractor` library, or suggesting entirely new features, your contribution matters.
+
+1. **Check out our [Contributing Guide](CONTRIBUTING.md)** for branching, testing, and pull-request standards.
+2. If you find a bug, open an Issue using our [Issue Templates](https://github.com/zainulnazir/hydra/issues).
+
+---
+
+## ⚖️ License
+
+This project is licensed under the AGPL-3.0 License. See the `LICENSE.txt` file for details.
