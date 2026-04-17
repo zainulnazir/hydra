@@ -525,12 +525,80 @@ details.card > .section-body {
 }
 
 /* ── Responsive ── */
+
+/* Tablet / small desktop */
+@media (max-width: 768px) {
+  body { padding: 1.5rem 1rem 3rem; }
+  .wrapper { max-width: 100%; }
+  .hero-logo { width: 80px; height: 80px; border-radius: 18px; }
+  .hero-title { font-size: 2rem; }
+  .hero-desc { font-size: 0.82rem; }
+  .checkbox-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  details.card > summary { padding: 0.9rem 1rem; }
+  details.card > .section-body { padding: 0 1rem 1rem; }
+  .btn { padding: 0.75rem 1rem; font-size: 0.8rem; }
+}
+
+/* Phone landscape */
+@media (max-width: 600px) {
+  .hero-logo { width: 72px; height: 72px; border-radius: 16px; }
+  .hero-title { font-size: 1.85rem; }
+  .hero-version { font-size: 0.6rem; }
+  .hero-desc { font-size: 0.78rem; }
+  .hero-links { flex-direction: column; gap: 0.4rem; }
+  .checkbox-grid { grid-template-columns: 1fr 1fr; gap: 0.25rem; }
+  .checkbox-item { padding: 0.5rem; font-size: 0.72rem; }
+  .section-title { font-size: 0.82rem; }
+  .section-subtitle { font-size: 0.65rem; }
+  .field-input { font-size: 0.78rem; padding: 0.55rem 0.65rem; }
+  .field-label { font-size: 0.72rem; }
+  .field-row { flex-direction: column; }
+  .test-btn { padding: 0.5rem 0.75rem; }
+}
+
+/* Phone portrait */
 @media (max-width: 480px) {
   body { padding: 1rem 0.75rem 3rem; }
-  .hero-title { font-size: 1.75rem; }
-  .checkbox-grid { grid-template-columns: 1fr; }
+  .hero-logo { width: 64px; height: 64px; border-radius: 14px; }
+  .hero-title { font-size: 1.6rem; }
+  .hero-desc { font-size: 0.75rem; }
+  .checkbox-grid { grid-template-columns: 1fr; gap: 0.15rem; }
+  .checkbox-item { padding: 0.55rem 0.5rem; font-size: 0.75rem; min-height: 44px; }
+  .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; }
   .actions { flex-direction: column; }
-  .hero-links { flex-direction: column; gap: 0.4rem; }
+  .btn { padding: 0.85rem 1rem; font-size: 0.82rem; min-height: 48px; }
+  details.card > summary { padding: 0.85rem 0.9rem; min-height: 48px; }
+  details.card > .section-body { padding: 0 0.9rem 0.9rem; }
+  .pill-label { padding: 0.4rem 0.75rem; font-size: 0.72rem; min-height: 36px; display: inline-flex; align-items: center; }
+  .section-icon { width: 16px; height: 16px; }
+  .info-bar p { font-size: 0.68rem; }
+  .toast { font-size: 0.72rem; padding: 0.55rem 1rem; bottom: 1.5rem; }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  body { padding: 0.75rem 0.6rem 2.5rem; }
+  .hero-logo { width: 56px; height: 56px; }
+  .hero-title { font-size: 1.4rem; }
+  .hero-desc { font-size: 0.72rem; }
+  .section-title { font-size: 0.78rem; }
+  .btn { font-size: 0.78rem; }
+}
+
+/* iOS safe areas */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body { padding-bottom: calc(3rem + env(safe-area-inset-bottom)); }
+  .toast { bottom: calc(1.5rem + env(safe-area-inset-bottom)); }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+  .checkbox-item { min-height: 44px; }
+  .pill-label { min-height: 40px; display: inline-flex; align-items: center; }
+  .btn { min-height: 48px; }
+  details.card > summary { min-height: 48px; }
+  .test-btn { min-height: 44px; }
+  .field-input { min-height: 44px; font-size: 16px; }
 }
 `;
 
