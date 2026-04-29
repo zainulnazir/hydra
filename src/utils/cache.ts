@@ -37,10 +37,10 @@ export const createKeyvSqlite = (name: string): KeyvStoreAdapter => {
     return new KeyvCacheableMemory();
   }
 
-  if (redisUrl && redisUrl.startsWith('redis://')) {
+  if (redisUrl && (redisUrl.startsWith('redis://') || redisUrl.startsWith('rediss://'))) {
     return new KeyvRedis(redisUrl);
   } else if (redisUrl) {
-    console.warn(`Invalid REDIS_URL override: ${redisUrl}. Ensure it starts with redis://.`);
+    console.warn(`Invalid REDIS_URL override: ${redisUrl}. Ensure it starts with redis:// or rediss://.`);
   }
 
   const keyvSqlite = new KeyvSqlite(`sqlite://${cacheDir}/hydra-${name}.sqlite`);
